@@ -137,3 +137,51 @@ export const getStudentEnrollments = async (
         });
     }
 };
+
+export const getStudentDashboard = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const { email } = req.params;
+
+        const enrollments = await enrollmentCollection
+            .find({
+                studentEmail: email,
+            })
+            .sort({
+                enrolledAt: -1,
+            })
+            .toArray();
+
+        const totalCourses = enrollments.length;
+
+        const totalSpent = enrollments.reduce(
+            (sum, item) => sum + item.price,
+            0
+        );
+
+        const completedCourses = enrollments.filter(
+            (item) => item.progress === 100
+        ).length;
+
+        res.status(200).json({
+            success: true,
+
+            summary: {
+                totalCourses,
+                completedCourses,
+                totalSpent,
+            },
+
+            recentCourses: enrollments.slice(0, 5),
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to load dashboard.",
+        });
+    }
+};
