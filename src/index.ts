@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 import { connectDB } from "./config/db";
 import courseRoutes from "./routes/course.routes";
-
+import enrollmentRoutes from "./routes/enrollment.routes";
 dotenv.config();
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.json());
 console.log("Registering course routes...");
 
 app.use("/courses", courseRoutes);
-
+app.use("/enrollments", enrollmentRoutes);
 app.get("/", (req, res) => {
     res.send("LearnSphere Server Running");
 });

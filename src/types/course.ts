@@ -24,7 +24,7 @@ export interface Course {
     instructorId: string;
     instructorName: string;
     instructorEmail: string;
-
+    enrollmentCount: 0,
     createdAt: Date;
     updatedAt: Date;
 }
