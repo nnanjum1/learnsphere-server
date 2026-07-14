@@ -4,14 +4,12 @@ import {
     deleteCourse,
     getCourseById,
     getInstructorCourses,
-    updateCourse,
+    updateCourse, getAllCourses
 } from "../controller/course.controller";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-    res.send("Course Route Working");
-});
+
 
 router.post("/", createCourse);
 
@@ -29,6 +27,8 @@ router.delete("/:id", deleteCourse);
 router.get("/:id", getCourseById);
 
 router.patch("/:id", updateCourse);
+
+router.get("/", getAllCourses);
 
 
 

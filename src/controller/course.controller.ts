@@ -186,3 +186,94 @@ export const updateCourse = async (
         });
     }
 };
+
+
+
+export const getAllCourses = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const {
+            search = "",
+            category = "",
+            level = "",
+            sort = "newest",
+            page = "1",
+            limit = "6",
+        } = req.query;
+
+        const query: any = {};
+
+        if (search) {
+            query.title = {
+                $regex: search,
+                $options: "i",
+            };
+        }
+
+        if (category) {
+            query.category = category;
+        }
+
+        if (level) {
+            query.level = level;
+        }
+
+        let sortOption: any = {
+            createdAt: -1,
+        };
+
+        switch (sort) {
+            case "price_asc":
+                sortOption = { price: 1 };
+                break;
+
+            case "price_desc":
+                sortOption = { price: -1 };
+                break;
+
+            case "title":
+                sortOption = { title: 1 };
+                break;
+
+            default:
+                sortOption = { createdAt: -1 };
+        }
+
+        const currentPage = Number(page);
+        const pageSize = Number(limit);
+
+        const skip =
+            (currentPage - 1) * pageSize;
+
+        const total =
+            await courseCollection.countDocuments(
+                query
+            );
+
+        const courses =
+            await courseCollection
+                .find(query)
+                .sort(sortOption)
+                .skip(skip)
+                .limit(pageSize)
+                .toArray();
+
+        res.status(200).json({
+            success: true,
+            courses,
+            totalPages: Math.ceil(
+                total / pageSize
+            ),
+            currentPage,
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch courses.",
+        });
+    }
+};
