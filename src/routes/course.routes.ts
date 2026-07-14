@@ -4,7 +4,9 @@ import {
     deleteCourse,
     getCourseById,
     getInstructorCourses,
-    updateCourse, getAllCourses
+    updateCourse, getAllCourses,
+    getFeaturedCourses,
+    getCourseCategories
 } from "../controller/course.controller";
 
 const router = Router();
@@ -14,9 +16,6 @@ const router = Router();
 router.post("/", createCourse);
 
 
-
-router.post("/", createCourse);
-
 router.get(
     "/instructor/:email",
     getInstructorCourses
@@ -24,11 +23,16 @@ router.get(
 
 router.delete("/:id", deleteCourse);
 
+router.get("/featured", getFeaturedCourses);
+
+router.get("/", getAllCourses);
+router.get(
+    "/categories",
+    getCourseCategories
+);
 router.get("/:id", getCourseById);
 
 router.patch("/:id", updateCourse);
-
-router.get("/", getAllCourses);
 
 
 

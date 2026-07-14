@@ -277,3 +277,74 @@ export const getAllCourses = async (
         });
     }
 };
+
+export const getFeaturedCourses = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const courses = await courseCollection
+            .find({})
+            .sort({
+                enrollmentCount: -1,
+            })
+            .limit(4)
+            .toArray();
+
+        res.status(200).json({
+            success: true,
+            courses,
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch featured courses.",
+        });
+    }
+};
+
+export const getCourseCategories = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const result = await courseCollection
+            .aggregate([
+                {
+                    $group: {
+                        _id: "$category",
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        category: "$_id",
+                    },
+                },
+                {
+                    $sort: {
+                        category: 1,
+                    },
+                },
+            ])
+            .toArray();
+
+        const categories = result.map(
+            (item) => item.category
+        );
+
+        res.status(200).json({
+            success: true,
+            categories,
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch categories.",
+        });
+    }
+};
