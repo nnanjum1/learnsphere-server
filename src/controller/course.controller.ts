@@ -31,3 +31,35 @@ export const createCourse = async (
         });
     }
 };
+
+
+// Get all courses of an instructor
+export const getInstructorCourses = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const { email } = req.params;
+
+        const courses = await courseCollection
+            .find({
+                instructorEmail: email,
+            })
+            .sort({
+                createdAt: -1,
+            })
+            .toArray();
+
+        res.status(200).json({
+            success: true,
+            courses,
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch courses.",
+        });
+    }
+};
