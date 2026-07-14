@@ -2,8 +2,12 @@ import { Router } from "express";
 import {
     createCourse,
     deleteCourse,
+    getCourseById,
     getInstructorCourses,
-} from "../controller/course.controller"; const router = Router();
+    updateCourse,
+} from "../controller/course.controller";
+
+const router = Router();
 
 router.get("/", (req, res) => {
     res.send("Course Route Working");
@@ -21,6 +25,12 @@ router.get(
 );
 
 router.delete("/:id", deleteCourse);
+
+router.get("/:id", getCourseById);
+
+router.patch("/:id", updateCourse);
+
+
 
 
 export default router;
