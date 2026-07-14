@@ -1,9 +1,11 @@
+import { ObjectId } from "mongodb";
 export type CourseLevel =
     | "Beginner"
     | "Intermediate"
     | "Advanced";
 
 export interface Course {
+    _id?: ObjectId;
     title: string;
     thumbnail: string;
 

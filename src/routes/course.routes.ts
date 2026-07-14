@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     createCourse,
+    deleteCourse,
     getInstructorCourses,
 } from "../controller/course.controller"; const router = Router();
 
@@ -18,6 +19,8 @@ router.get(
     "/instructor/:email",
     getInstructorCourses
 );
+
+router.delete("/:id", deleteCourse);
 
 
 export default router;

@@ -21,6 +21,8 @@ app.get("/", (req, res) => {
     res.send("LearnSphere Server Running");
 });
 
+
+
 const startServer = async () => {
     await connectDB();
 
