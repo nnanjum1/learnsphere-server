@@ -185,3 +185,30 @@ export const getStudentDashboard = async (
         });
     }
 };
+
+export const checkEnrollment = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const { courseId, email } = req.params;
+
+        const enrollment =
+            await enrollmentCollection.findOne({
+                courseId,
+                studentEmail: email,
+            });
+
+        res.status(200).json({
+            enrolled: !!enrollment,
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to check enrollment.",
+        });
+    }
+};
