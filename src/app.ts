@@ -25,13 +25,12 @@ const connectDatabase = async () => {
     try {
         await connectDB();
         isConnected = true;
-        console.log("MongoDB connected");
+        console.log("✅ MongoDB connected");
     } catch (error) {
-        console.error("MongoDB connection error:", error);
+        console.error("❌ MongoDB connection error:", error);
+        throw error;
     }
 };
-
-connectDatabase();
 
 // Middleware
 app.use(
@@ -47,8 +46,24 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+
+// Ensure database connection before every request
+app.use(async (req, res, next) => {
+    try {
+        await connectDatabase();
+        next();
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Database connection failed",
+        });
+    }
+});
+
+
 // Better Auth
 app.use("/api/auth", toNodeHandler(auth));
+
 
 // Application routes
 app.use("/auth", authRoute);
@@ -56,10 +71,12 @@ app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
 app.use("/dashboard", dashboardRoutes);
 
+
 // Default route
 app.get("/", (req, res) => {
     res.status(200).send("🚀 LearnSphere Server Running");
 });
+
 
 // Health check
 app.get("/health", (req, res) => {
@@ -69,5 +86,5 @@ app.get("/health", (req, res) => {
     });
 });
 
-// Export Express app for Vercel
+
 export default app;
