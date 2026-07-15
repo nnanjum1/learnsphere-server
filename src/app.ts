@@ -18,21 +18,16 @@ const app = express();
 
 let isConnected = false;
 
-// MongoDB connection for Vercel serverless
 const connectDatabase = async () => {
     if (isConnected) return;
 
-    try {
-        await connectDB();
-        isConnected = true;
-        console.log("✅ MongoDB connected");
-    } catch (error) {
-        console.error("❌ MongoDB connection error:", error);
-        throw error;
-    }
+    await connectDB();
+
+    isConnected = true;
+    console.log("MongoDB connected");
 };
 
-// Middleware
+
 app.use(
     cors({
         origin: [
@@ -47,43 +42,23 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-// Ensure database connection before every request
-app.use(async (req, res, next) => {
-    try {
-        await connectDatabase();
-        next();
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Database connection failed",
-        });
-    }
-});
-
-
-// Better Auth
+// DB connection before API requests
 app.use("/api/auth", toNodeHandler(auth));
 
 
-// Application routes
+console.log("Registering Better Auth");
+
+app.use("/api/auth", toNodeHandler(auth));
+
+
 app.use("/auth", authRoute);
 app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
 app.use("/dashboard", dashboardRoutes);
 
 
-// Default route
 app.get("/", (req, res) => {
-    res.status(200).send("🚀 LearnSphere Server Running");
-});
-
-
-// Health check
-app.get("/health", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "LearnSphere API is healthy",
-    });
+    res.send("🚀 LearnSphere Server Running");
 });
 
 

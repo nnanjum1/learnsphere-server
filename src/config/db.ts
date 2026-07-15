@@ -1,29 +1,57 @@
 import dotenv from "dotenv";
-dotenv.config();
-
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-console.log("MONGODB_URI:", process.env.MONGODB_URI);
-console.log("DB_NAME:", process.env.DB_NAME);
+dotenv.config();
 
-const uri = process.env.MONGODB_URI!;
+const uri = process.env.MONGODB_URI;
 
-export const client = new MongoClient(uri, {
+if (!uri) {
+    throw new Error("❌ MONGODB_URI is missing");
+}
+
+const dbName = process.env.DB_NAME;
+
+if (!dbName) {
+    throw new Error("❌ DB_NAME is missing");
+}
+
+const mongoOptions = {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
     },
-});
+};
 
-export const db = client.db(process.env.DB_NAME);
+let mongoClient: MongoClient;
+let clientPromise: Promise<MongoClient>;
+
+if (process.env.NODE_ENV === "development") {
+    if (!(global as any)._mongoClientPromise) {
+        mongoClient = new MongoClient(uri, mongoOptions);
+
+        (global as any)._mongoClientPromise = mongoClient.connect();
+    }
+
+    clientPromise = (global as any)._mongoClientPromise;
+
+} else {
+    mongoClient = new MongoClient(uri, mongoOptions);
+    clientPromise = mongoClient.connect();
+}
+
+
+export const client = await clientPromise;
+
+export const db = client.db(dbName);
+
 
 export const connectDB = async () => {
     try {
-        await client.connect();
-        console.log("✅ Connected to MongoDB");
+        await clientPromise;
+        console.log("✅ MongoDB connected");
     } catch (error) {
-        console.error(error);
+        console.error("❌ MongoDB connection error:", error);
         throw error;
     }
 };
