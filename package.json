@@ -1,6 +1,9 @@
 {
   "name": "learnsphere-server",
   "version": "1.0.0",
+  "engines": {
+    "node": "22.x"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
