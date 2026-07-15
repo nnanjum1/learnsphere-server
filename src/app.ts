@@ -24,9 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Database connection for Serverless environments (Vercel)
-if (process.env.NODE_ENV === "production") {
-    connectDB().catch(err => console.error("MongoDB connection error:", err));
-}
+connectDB().catch(err => console.error("MongoDB connection error:", err));
 
 // Routes
 app.use("/auth", authRoute);
