@@ -8,7 +8,7 @@ import courseRoutes from "./routes/course.routes.js";
 import enrollmentRoutes from "./routes/enrollment.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import { connectDB } from "./config/db.js";
-import { auth } from "./config/auth";
+import { auth } from "./config/auth.js";
 import { toNodeHandler } from "better-auth/node";
 
 

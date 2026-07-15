@@ -1,16 +1,12 @@
-import dns from "node:dns";
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
-import { MongoClient, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
-
 dotenv.config();
 
-const uri = process.env.MONGODB_URI;
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-if (!uri) {
-    throw new Error("MONGODB_URI is not defined!");
-}
+console.log("MONGODB_URI:", process.env.MONGODB_URI);
+console.log("DB_NAME:", process.env.DB_NAME);
+
+const uri = process.env.MONGODB_URI!;
 
 export const client = new MongoClient(uri, {
     serverApi: {
@@ -25,10 +21,9 @@ export const db = client.db(process.env.DB_NAME);
 export const connectDB = async () => {
     try {
         await client.connect();
-        await client.db("admin").command({ ping: 1 });
-
-        console.log("✅ Connected to MongoDB Atlas successfully!");
+        console.log("✅ Connected to MongoDB");
     } catch (error) {
         console.error(error);
+        throw error;
     }
 };
