@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { db } from "../config/db";
-import { Course } from "../types/course";
+import { db } from "../config/db.js";
+import { Course } from "../types/course.js";
 import { ObjectId } from "mongodb";
 
 const courseCollection = db.collection<Course>("courses");

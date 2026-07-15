@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getInstructorDashboard } from "../controller/dashboard.controller";
-import { getStudentDashboard } from "../controller/enrollment.controller";
+import { getInstructorDashboard } from "../controller/dashboard.controller.js";
+import { getStudentDashboard } from "../controller/enrollment.controller.js";
 
 const router = Router();
 

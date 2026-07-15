@@ -1,5 +1,5 @@
-import { db } from "./db";
-import { Course } from "../types/course";
+import { db } from "./db.js";
+import { Course } from "../types/course.js";
 
 export const courseCollection =
     db.collection<Course>("courses");

@@ -7,9 +7,9 @@ import {
     updateCourse, getAllCourses,
     getFeaturedCourses,
     getCourseCategories
-} from "../controller/course.controller";
-import { verifyToken } from "../middleware/verifyToken";
-import { verifyInstructor } from "../middleware/verifyInstructor";
+} from "../controller/course.controller.js";
+import { verifyToken } from "../middleware/verifyToken.js";
+import { verifyInstructor } from "../middleware/verifyInstructor.js";
 
 const router = Router();
 

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 
-import { db } from "../config/db";
+import { db } from "../config/db.js";
 
-import { Enrollment } from "../types/enrollment";
-import { Course } from "../types/course";
+import { Enrollment } from "../types/enrollment.js";
+import { Course } from "../types/course.js";
 
 const enrollmentCollection =
     db.collection<Enrollment>("enrollments");
