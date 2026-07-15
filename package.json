@@ -4,10 +4,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "echo 'Skipping manual compilation'",
+    "build": "tsc",
     "start": "node dist/server.js"
   },
   "dependencies": {
+    "better-auth": "^1.6.23",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

@@ -8,6 +8,9 @@ import courseRoutes from "./routes/course.routes.js";
 import enrollmentRoutes from "./routes/enrollment.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import { connectDB } from "./config/db.js";
+import { auth } from "./config/auth";
+import { toNodeHandler } from "better-auth/node";
+
 
 dotenv.config();
 
@@ -25,10 +28,9 @@ app.use(cookieParser());
 
 // Database connection for Serverless environments (Vercel)
 connectDB().catch(err => console.error("MongoDB connection error:", err));
-
+app.use("/api/auth", toNodeHandler(auth));
 // Routes
 app.use("/auth", authRoute);
-app.use("/api/auth", authRoute);
 app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
 app.use("/dashboard", dashboardRoutes);
