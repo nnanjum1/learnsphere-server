@@ -8,20 +8,25 @@ import {
     getFeaturedCourses,
     getCourseCategories
 } from "../controller/course.controller";
+import { verifyToken } from "../middleware/verifyToken";
+import { verifyInstructor } from "../middleware/verifyInstructor";
 
 const router = Router();
 
 
 
-router.post("/", createCourse);
+router.post("/", verifyToken,
+    verifyInstructor, createCourse);
 
 
 router.get(
-    "/instructor/:email",
+    "/instructor/:email", verifyToken,
+    verifyInstructor,
     getInstructorCourses
 );
 
-router.delete("/:id", deleteCourse);
+router.delete("/:id", verifyToken,
+    verifyInstructor, deleteCourse);
 
 router.get("/featured", getFeaturedCourses);
 
@@ -32,7 +37,8 @@ router.get(
 );
 router.get("/:id", getCourseById);
 
-router.patch("/:id", updateCourse);
+router.patch("/:id", verifyToken,
+    verifyInstructor, updateCourse);
 
 
 

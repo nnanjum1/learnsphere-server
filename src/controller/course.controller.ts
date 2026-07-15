@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 
 const courseCollection = db.collection<Course>("courses");
 
+
 export const createCourse = async (
     req: Request,
     res: Response
@@ -66,38 +67,32 @@ export const getInstructorCourses = async (
 
 
 
-
-interface DeleteParams {
-    id: string;
-}
-
 export const deleteCourse = async (
-    req: Request<DeleteParams>,
+    req: Request,
     res: Response
 ) => {
     try {
-        const id = req.params.id;
+        const id = req.params.id as string;
 
         const result = await courseCollection.deleteOne({
             _id: new ObjectId(id),
         });
 
         if (result.deletedCount === 0) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Course not found.",
             });
-            return;
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Course deleted successfully.",
         });
     } catch (error) {
         console.error(error);
 
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Failed to delete course.",
         });
@@ -140,16 +135,13 @@ export const getCourseById = async (
     }
 };
 
-interface UpdateParams {
-    id: string;
-}
 
 export const updateCourse = async (
-    req: Request<UpdateParams>,
+    req: Request,
     res: Response
 ) => {
     try {
-        const id = req.params.id;
+        const id = req.params.id as string;
 
         const updatedCourse = {
             ...req.body,
@@ -166,27 +158,25 @@ export const updateCourse = async (
         );
 
         if (result.matchedCount === 0) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Course not found.",
             });
-            return;
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Course updated successfully.",
         });
     } catch (error) {
         console.error(error);
 
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Failed to update course.",
         });
     }
 };
-
 
 
 export const getAllCourses = async (
