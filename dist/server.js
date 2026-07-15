@@ -3,15 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
 const app_js_1 = __importDefault(require("./app.js"));
-const db_js_1 = require("./config/db.js");
-dotenv_1.default.config();
 const PORT = process.env.PORT || 5000;
-const startServer = async () => {
-    await (0, db_js_1.connectDB)();
-    app_js_1.default.listen(PORT, () => {
-        console.log(`🚀 Server running on port ${PORT}`);
-    });
+const startServer = () => {
+    try {
+        app_js_1.default.listen(PORT, () => {
+            console.log(`🚀 Server running locally on port ${PORT}`);
+        });
+    }
+    catch (error) {
+        console.error("Failed to start local development server:", error);
+        process.exit(1);
+    }
 };
 startServer();

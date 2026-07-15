@@ -19,10 +19,14 @@ const app = express();
 // Middleware
 app.use(
     cors({
-        origin: process.env.CLIENT_URL,
+        origin: [
+            "http://localhost:3000",
+            "https://learnsphere-client.vercel.app",
+        ],
         credentials: true,
     })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
