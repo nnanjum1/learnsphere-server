@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const course_controller_1 = require("../controller/course.controller");
+const verifyToken_1 = require("../middleware/verifyToken");
+const verifyInstructor_1 = require("../middleware/verifyInstructor");
+const router = (0, express_1.Router)();
+router.post("/", verifyToken_1.verifyToken, verifyInstructor_1.verifyInstructor, course_controller_1.createCourse);
+router.get("/instructor/:email", verifyToken_1.verifyToken, verifyInstructor_1.verifyInstructor, course_controller_1.getInstructorCourses);
+router.delete("/:id", verifyToken_1.verifyToken, verifyInstructor_1.verifyInstructor, course_controller_1.deleteCourse);
+router.get("/featured", course_controller_1.getFeaturedCourses);
+router.get("/", course_controller_1.getAllCourses);
+router.get("/categories", course_controller_1.getCourseCategories);
+router.get("/:id", course_controller_1.getCourseById);
+router.patch("/:id", verifyToken_1.verifyToken, verifyInstructor_1.verifyInstructor, course_controller_1.updateCourse);
+exports.default = router;
