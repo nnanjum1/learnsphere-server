@@ -12,6 +12,13 @@ export const auth = betterAuth({
         "https://learnsphere-client.vercel.app",
     ],
 
+    advanced: {
+        defaultCookieAttributes: {
+            sameSite: "none",
+            secure: true,
+        },
+    },
+
     database: mongodbAdapter(db, {
         client,
     }),
@@ -21,18 +28,24 @@ export const auth = betterAuth({
         minPasswordLength: 6,
     },
 
+    user: {
+        additionalFields: {
+            role: {
+                type: "string",
+                required: true,
+            },
+        },
+    },
+
     session: {
         cookieCache: {
             enabled: true,
             strategy: "jwt",
-            maxAge: 60 * 60 * 24 * 7,
-        },
-
-        cookieAttributes: {
-            sameSite: "none",
-            secure: true,
+            maxAge: 7 * 24 * 60 * 60,
         },
     },
 
-    plugins: [jwt()],
+    plugins: [
+        jwt(),
+    ],
 });
