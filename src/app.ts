@@ -28,6 +28,7 @@ connectDB().catch(err => console.error("MongoDB connection error:", err));
 
 // Routes
 app.use("/auth", authRoute);
+app.use("/api/auth", authRoute);
 app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
 app.use("/dashboard", dashboardRoutes);
