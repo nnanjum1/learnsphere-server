@@ -21,24 +21,18 @@ export const auth = betterAuth({
         minPasswordLength: 6,
     },
 
-    user: {
-        additionalFields: {
-            role: {
-                type: "string",
-                required: true,
-            },
-        },
-    },
-
     session: {
         cookieCache: {
             enabled: true,
             strategy: "jwt",
-            maxAge: 7 * 24 * 60 * 60,
+            maxAge: 60 * 60 * 24 * 7,
+        },
+
+        cookieAttributes: {
+            sameSite: "none",
+            secure: true,
         },
     },
 
-    plugins: [
-        jwt(),
-    ],
+    plugins: [jwt()],
 });

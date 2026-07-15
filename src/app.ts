@@ -22,12 +22,12 @@ const connectDatabase = async () => {
     if (isConnected) return;
 
     await connectDB();
-
     isConnected = true;
-    console.log("MongoDB connected");
+
+    console.log("✅ MongoDB Connected");
 };
 
-
+// Middleware
 app.use(
     cors({
         origin: [
@@ -41,25 +41,30 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-
-// DB connection before API requests
+// Ensure MongoDB is connected
+app.use(async (req, res, next) => {
+    try {
+        await connectDatabase();
+        next();
+    } catch (error) {
+        console.error("MongoDB connection failed:", error);
+        res.status(500).json({
+            success: false,
+            message: "Database connection failed",
+        });
+    }
+});
+// Better Auth
 app.use("/api/auth", toNodeHandler(auth));
 
-
-console.log("Registering Better Auth");
-
-app.use("/api/auth", toNodeHandler(auth));
-
-
+// Routes
 app.use("/auth", authRoute);
 app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
 app.use("/dashboard", dashboardRoutes);
 
-
 app.get("/", (req, res) => {
     res.send("🚀 LearnSphere Server Running");
 });
-
 
 export default app;
