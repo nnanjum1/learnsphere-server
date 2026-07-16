@@ -17,10 +17,11 @@ export const auth = betterAuth({
             role: {
                 type: "string",
                 required: true,
+                defaultValue: "student",
+                input: true,
             }
         }
     },
-
 
 
     emailAndPassword: {
@@ -44,6 +45,5 @@ export const auth = betterAuth({
             },
         },
     },
-
 
 });
