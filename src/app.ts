@@ -4,6 +4,7 @@ import cors from "cors";
 import courseRoutes from "./routes/course.routes.js";
 import enrollmentRoutes from "./routes/enrollment.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import cookieParser from "cookie-parser";
 
 import { connectDB } from "./config/db.js";
 import { auth } from "./config/auth.js";
@@ -29,12 +30,21 @@ const connectDatabase = async () => {
 };
 
 
-// CORS
 app.use(
     cors({
         origin: [
             "http://localhost:3000",
-            process.env.CLIENT_URL!,
+            "https://learnsphere-client.vercel.app",
+        ],
+        credentials: true,
+    })
+);
+app.options(
+    "*",
+    cors({
+        origin: [
+            "http://localhost:3000",
+            "https://learnsphere-client.vercel.app",
         ],
         credentials: true,
     })
@@ -47,9 +57,12 @@ app.set(
 
 
 app.use(express.json());
+app.use(cookieParser());
 
-
-// Database connection
+app.use(
+    "/api/auth",
+    toNodeHandler(auth)
+);
 
 app.use(
     async (req, res, next) => {
@@ -81,10 +94,7 @@ app.use(
 
 // Better Auth
 
-app.use(
-    "/api/auth",
-    toNodeHandler(auth)
-);
+
 
 
 // Routes
