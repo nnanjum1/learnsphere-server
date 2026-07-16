@@ -39,16 +39,7 @@ app.use(
         credentials: true,
     })
 );
-app.options(
-    "*",
-    cors({
-        origin: [
-            "http://localhost:3000",
-            "https://learnsphere-client.vercel.app",
-        ],
-        credentials: true,
-    })
-);
+
 
 app.set(
     "trust proxy",
