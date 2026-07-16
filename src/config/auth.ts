@@ -1,13 +1,32 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { jwt } from "better-auth/plugins";
+import { MongoClient } from "mongodb";
 
-import { client, db } from "./db.js";
+
+const client = new MongoClient(
+    process.env.MONGODB_URI!
+);
+
+
+const db = client.db(
+    process.env.DB_NAME
+);
+
 
 
 export const auth = betterAuth({
 
-    baseURL: process.env.BETTER_AUTH_URL,
+    database: mongodbAdapter(
+        db
+    ),
+
+
+    secret:
+        process.env.BETTER_AUTH_SECRET,
+
+
+    baseURL:
+        process.env.BETTER_AUTH_URL,
 
 
     trustedOrigins: [
@@ -15,51 +34,5 @@ export const auth = betterAuth({
         "https://learnsphere-client.vercel.app",
     ],
 
-
-    advanced: {
-        defaultCookieAttributes: {
-            sameSite: "none",
-            secure: true,
-            httpOnly: true,
-        },
-    },
-
-
-    database: mongodbAdapter(
-        db,
-        {
-            client,
-        }
-    ),
-
-
-    emailAndPassword: {
-        enabled: true,
-        minPasswordLength: 6,
-    },
-
-
-    user: {
-        additionalFields: {
-            role: {
-                type: "string",
-                required: true,
-            }
-        }
-    },
-
-
-    session: {
-        cookieCache: {
-            enabled: true,
-            strategy: "jwt",
-            maxAge: 7 * 24 * 60 * 60,
-        }
-    },
-
-
-    plugins: [
-        jwt(),
-    ],
 
 });
