@@ -108,14 +108,9 @@ app.use(
 );
 
 
-app.get(
-    "/",
-    (req, res) => {
-        res.send(
-            "🚀 LearnSphere Server Running"
-        );
-    }
-);
+app.get("/", (req, res) => {
+    res.send("LearnSphere Server Running - UPDATED");
+});
 
 
 export default app;
