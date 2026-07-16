@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
 
 import courseRoutes from "./routes/course.routes.js";
 import enrollmentRoutes from "./routes/enrollment.routes.js";
@@ -9,9 +8,6 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import { connectDB } from "./config/db.js";
 import { auth } from "./config/auth.js";
 import { toNodeHandler } from "better-auth/node";
-
-
-
 
 
 const app = express();
@@ -24,20 +20,16 @@ const connectDatabase = async () => {
 
     if (isConnected) return;
 
-
     await connectDB();
 
     isConnected = true;
-
 
     console.log("✅ MongoDB Connected");
 
 };
 
 
-
 // CORS
-
 app.use(
     cors({
         origin: [
@@ -53,10 +45,8 @@ app.set(
     1
 );
 
+
 app.use(express.json());
-
-app.use(cookieParser());
-
 
 
 // Database connection
@@ -70,8 +60,7 @@ app.use(
 
             next();
 
-        }
-        catch (error) {
+        } catch (error) {
 
             console.error(
                 "MongoDB connection failed:",
@@ -90,7 +79,6 @@ app.use(
 );
 
 
-
 // Better Auth
 
 app.use(
@@ -99,8 +87,7 @@ app.use(
 );
 
 
-
-// Application Routes
+// Routes
 
 app.use(
     "/courses",
@@ -120,7 +107,6 @@ app.use(
 );
 
 
-
 app.get(
     "/",
     (req, res) => {
@@ -129,7 +115,6 @@ app.get(
         );
     }
 );
-
 
 
 export default app;
