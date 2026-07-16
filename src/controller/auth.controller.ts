@@ -1,56 +1,17 @@
-import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+// // routes/auth.routes.ts
 
-export const createJWT = (
-    req: Request,
-    res: Response
-) => {
-    const user = req.body;
+// import { Router } from "express";
+// import { toNodeHandler } from "better-auth/node";
+// import { auth } from "../config/auth.js";
 
-    const token = jwt.sign(
-        {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-        },
-        process.env.JWT_SECRET as string,
-        {
-            expiresIn: "7d",
-        }
-    );
 
-    console.log("JWT Token:", token);
+// const router = Router();
 
-    res
-        .cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite:
-                process.env.NODE_ENV === "production"
-                    ? "none"
-                    : "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
-        .send({
-            success: true,
-        });
-};
 
-export const logout = (
-    req: Request,
-    res: Response
-) => {
+// router.all(
+//     "/*",
+//     toNodeHandler(auth)
+// );
 
-    res.clearCookie("token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite:
-            process.env.NODE_ENV === "production"
-                ? "none"
-                : "lax",
-    });
 
-    res.send({
-        success: true,
-    });
-};
+// export default router;
