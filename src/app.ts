@@ -29,7 +29,6 @@ const connectDatabase = async () => {
 
 };
 
-
 app.use(
     cors({
         origin: [
@@ -40,72 +39,44 @@ app.use(
     })
 );
 
-
-app.set(
-    "trust proxy",
-    1
-);
-
+app.set("trust proxy", 1);
 
 app.use(express.json());
+
 app.use(cookieParser());
 
-app.use(
-    "/api/auth",
-    toNodeHandler(auth)
-);
 
+// Database connection FIRST
 app.use(
     async (req, res, next) => {
-
         try {
-
             await connectDatabase();
-
             next();
-
         } catch (error) {
-
-            console.error(
-                "MongoDB connection failed:",
-                error
-            );
-
+            console.error("MongoDB connection failed:", error);
 
             res.status(500).json({
                 success: false,
                 message: "Database connection failed"
             });
-
         }
-
     }
 );
 
 
-// Better Auth
-
-
-
-
-// Routes
-
+// Better Auth AFTER database
 app.use(
-    "/courses",
-    courseRoutes
+    "/api/auth",
+    toNodeHandler(auth)
 );
 
 
-app.use(
-    "/enrollments",
-    enrollmentRoutes
-);
+// Application routes
+app.use("/courses", courseRoutes);
 
+app.use("/enrollments", enrollmentRoutes);
 
-app.use(
-    "/dashboard",
-    dashboardRoutes
-);
+app.use("/dashboard", dashboardRoutes);
 
 
 app.get("/", (req, res) => {
