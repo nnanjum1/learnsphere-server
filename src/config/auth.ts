@@ -16,34 +16,24 @@ export const auth = betterAuth({
         additionalFields: {
             role: {
                 type: "string",
-                required: true,
+                required: false,
                 defaultValue: "student",
                 input: true,
-            }
-        }
+            },
+        },
     },
-
 
     emailAndPassword: {
         enabled: true,
     },
-
 
     trustedOrigins: [
         "https://learnsphere-client.vercel.app",
         "http://localhost:3000",
     ],
 
-
     advanced: {
-        cookies: {
-            session_token: {
-                attributes: {
-                    sameSite: "none",
-                    secure: true,
-                },
-            },
-        },
+        trustedProxyHeaders: true,
     },
 
 });
